@@ -1,0 +1,1204 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+<title>Growth Audit — REFSIX</title>
+<link rel="icon" href="img/icon.jpg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  color-scheme: only dark;
+  /* ---- REFSIX, extracted from their live iOS screens ---- */
+  --rs-bg:#181818; --rs-bar:#171717; --rs-card:#212121; --rs-line:#2C2C2C; --rs-outline:#3A3A3A;
+  --rs-ink:#FFFFFF; --rs-ink2:#D6D6D6; --rs-muted:#8C8C8C;
+  --rs-lime:#D3E62E; --rs-lime-t:#D3E62E; --rs-on-lime:#111111; --rs-red:#430B0A;
+  --r-ctl:14px; --r-media:18px;
+  /* ---- the report shell, in REFSIX's own palette (dark app → dark shell) ---- */
+  --bg:#181818; --bg2:#1E1E1E; --surf:#212121;
+  --hair:rgba(255,255,255,.08); --hair2:rgba(255,255,255,.16);
+  --ink:#F4F4F4; --ink2:#BDBDBD; --ink3:#8A8A8A;
+  --accent:#D3E62E; --accent-lift:#D3E62E; --on-accent:#111111;
+  --panel:#FFFFFF; --panel-ink:#15181B; --panel-muted:#5F666D; --panel-line:#E9ECEF;
+  --accent-ink:#5A6600;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--ink);
+  font-family:'Plus Jakarta Sans',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 32px}
+@media(max-width:700px){.wrap{padding:0 16px}}
+
+/* ============ top bar ============ */
+.nav{position:sticky;top:0;z-index:70;background:rgba(24,24,24,.86);backdrop-filter:blur(18px) saturate(160%);
+  border-bottom:1px solid var(--hair)}
+.nav-in{max-width:1080px;margin:0 auto;padding:0 32px;height:58px;display:flex;align-items:center;gap:18px}
+@media(max-width:700px){.nav-in{padding:0 16px;gap:12px}}
+.nav-brand{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;letter-spacing:-.01em}
+.nav-brand .mk{width:26px;height:26px;flex:none;display:block;border-radius:7px;overflow:hidden}
+.nav-brand .mk img{width:26px;height:26px;display:block}
+.nav-brand span{color:var(--ink2);font-weight:500}
+.nav-brand b{color:var(--ink);font-weight:600}
+.nav-links{margin-left:auto;display:flex;gap:2px;align-items:center}
+.nav-links button{padding:7px 14px;border-radius:8px;font-size:13px;font-weight:600;color:var(--ink3);transition:.16s}
+.nav-links button:hover{color:var(--ink)}
+.nav-links button.on{color:var(--ink);background:#2A2A2A;box-shadow:0 1px 4px rgba(0,0,0,.3)}
+@media(max-width:640px){.nav-brand span{display:none}}
+
+.view{display:none}
+.view.on{display:block}
+
+/* ============ hero ============ */
+.hero{padding:104px 0 0;text-align:center;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-340px;left:50%;transform:translateX(-50%);
+  width:1100px;height:640px;border-radius:50%;pointer-events:none;
+  background:radial-gradient(closest-side,rgba(211,230,46,.17),transparent 72%)}
+.hero::after{content:'';position:absolute;inset:0;pointer-events:none;z-index:0;
+  background:radial-gradient(38% 46% at 8% 22%,rgba(255,120,30,.10),transparent 70%),
+   radial-gradient(36% 44% at 92% 18%,rgba(60,170,60,.12),transparent 70%)}
+.hero>*{position:relative;z-index:1}
+.eyebrow{font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--accent-lift);margin-bottom:26px}
+.hero h1{font-size:76px;line-height:.98;font-weight:700;letter-spacing:-.045em;margin:0 0 24px}
+@media(max-width:820px){.hero h1{font-size:50px}.hero{padding-top:70px}}
+.hero .lede{font-size:20px;line-height:1.5;font-weight:400;color:var(--ink2);max-width:600px;margin:0 auto;letter-spacing:-.012em}
+@media(max-width:820px){.hero .lede{font-size:17px}}
+.hero .meta{margin-top:30px;font-size:12.5px;color:var(--ink3);letter-spacing:.02em}
+.hero .meta b{color:var(--ink2);font-weight:600}
+
+.stats{display:flex;justify-content:center;gap:0;margin:70px auto 0;max-width:760px;
+  border-top:1px solid var(--hair);border-bottom:1px solid var(--hair)}
+.stat{flex:1;padding:26px 14px;text-align:center;border-left:1px solid var(--hair)}
+.stat:first-child{border-left:none}
+.stat b{display:block;font-size:26px;font-weight:700;letter-spacing:-.03em;color:var(--ink)}
+.stat span{display:block;font-size:11.5px;color:var(--ink3);margin-top:5px;line-height:1.35}
+@media(max-width:700px){.stat b{font-size:19px}.stat{padding:18px 8px}}
+
+.fb{max-width:760px;margin:0 auto;padding:30px 0 0;display:grid;grid-template-columns:1fr 1fr;gap:26px;text-align:left}
+@media(max-width:700px){.fb{grid-template-columns:1fr;gap:20px;padding-top:24px}}
+.fb-k{grid-column:1/-1;font-size:10.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--ink3);text-align:center;margin-bottom:-6px}
+.fb-i{display:flex;gap:12px;align-items:flex-start}
+.fb-i .tick{width:18px;height:18px;flex:none;margin-top:3px;border-radius:50%;background:rgba(211,230,46,.16);
+  display:grid;place-items:center}
+.fb-i .tick svg{width:10px;height:10px;stroke:var(--accent-lift);stroke-width:3;fill:none;
+  stroke-linecap:round;stroke-linejoin:round}
+.fb-i p{font-size:14px;line-height:1.55;color:var(--ink2);margin:0}
+.fb-i p b{color:var(--ink);font-weight:700}
+
+.sec{padding:96px 0}
+.sec-k{font-size:11.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--ink3);margin-bottom:18px}
+.sec h2{font-size:38px;line-height:1.14;font-weight:700;letter-spacing:-.035em;margin:0 0 20px;max-width:680px}
+@media(max-width:820px){.sec h2{font-size:29px}.sec{padding:64px 0}}
+.sec p.body{font-size:17px;line-height:1.66;color:var(--ink2);max-width:640px;margin:0 0 18px;letter-spacing:-.008em}
+.sec p.body b{color:var(--ink);font-weight:600}
+.rule{height:1px;background:var(--hair);margin:0}
+
+.notes{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:40px;max-width:820px}
+@media(max-width:760px){.notes{grid-template-columns:1fr}}
+.note{background:var(--surf);border:1px solid var(--hair);border-radius:16px;padding:24px 26px}
+.note h4{font-size:15px;font-weight:700;letter-spacing:-.015em;margin:0 0 8px}
+.note p{font-size:14px;line-height:1.6;color:var(--ink2);margin:0}
+
+.ideas{display:flex;flex-direction:column;gap:0;margin-top:14px;border-top:1px solid var(--hair)}
+.idea{display:grid;grid-template-columns:52px 1fr 180px;gap:26px;align-items:start;
+  padding:30px 4px;border-bottom:1px solid var(--hair);text-align:left;width:100%;transition:.18s}
+.idea:hover{background:rgba(255,255,255,.03)}
+@media(max-width:780px){.idea{grid-template-columns:38px 1fr;gap:16px}}
+.idea .no{font-size:13px;font-weight:700;color:var(--ink3);padding-top:4px;letter-spacing:.02em}
+.idea h3{font-size:21px;line-height:1.25;font-weight:700;letter-spacing:-.024em;margin:0 0 7px}
+@media(max-width:820px){.idea h3{font-size:18px}}
+.idea p{font-size:14.5px;line-height:1.6;color:var(--ink2);margin:0;max-width:540px}
+.idea .out{text-align:right;padding-top:3px}
+@media(max-width:780px){.idea .out{grid-column:2;text-align:left;padding-top:12px}}
+.idea .out b{display:block;font-size:19px;font-weight:700;letter-spacing:-.025em;color:var(--accent-lift);white-space:nowrap}
+.idea .out span{display:block;font-size:10.5px;color:var(--ink3);margin-top:3px;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.idea .seeit{display:inline-flex;align-items:center;gap:5px;margin-top:11px;font-size:12.5px;
+  font-weight:600;color:var(--accent-lift)}
+.idea .seeit svg{width:12px;height:12px}
+
+.band{background:var(--surf);border:1px solid var(--hair);border-radius:28px;padding:40px 44px;margin-top:44px;
+  display:flex;align-items:center;gap:36px;flex-wrap:wrap}
+@media(max-width:700px){.band{padding:28px 24px;gap:22px}}
+.band .lab{font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--ink3);margin-bottom:10px}
+.band .txt{flex:1;min-width:240px}
+.band .txt p{font-size:15.5px;line-height:1.6;color:var(--ink2);margin:0}
+.band .nums{display:flex;gap:34px}
+.band .nums div b{display:block;font-size:30px;font-weight:700;letter-spacing:-.035em;color:var(--accent-lift)}
+.band .nums div span{display:block;font-size:11px;color:var(--ink3);margin-top:2px;letter-spacing:.04em;
+  text-transform:uppercase;font-weight:600}
+
+.cta-row{display:flex;justify-content:center;margin-top:52px;align-items:center;gap:22px;flex-wrap:wrap}
+.bigbtn{display:inline-flex;align-items:center;gap:9px;background:var(--accent);color:var(--on-accent);
+  font-size:15px;font-weight:700;letter-spacing:-.01em;padding:15px 26px;border-radius:30px;transition:.16s}
+.bigbtn:hover{filter:brightness(1.06)}
+.bigbtn svg{width:15px;height:15px}
+
+.foot{border-top:1px solid var(--hair);padding:36px 0 70px;font-size:12.5px;line-height:1.6;color:var(--ink3)}
+
+/* ============ prototype stage ============ */
+.stage{display:grid;grid-template-columns:minmax(440px,1fr) minmax(400px,470px);gap:0;
+  align-items:start;min-height:calc(100vh - 58px)}
+@media(max-width:1080px){.stage{grid-template-columns:1fr}}
+.phonecol{padding:34px 24px 46px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.panelcol{border-left:1px solid var(--hair);background:var(--panel);color:var(--panel-ink);
+  min-height:calc(100vh - 58px);position:sticky;top:58px;max-height:calc(100vh - 58px);overflow-y:auto}
+@media(max-width:1080px){.panelcol{position:static;max-height:none;border-left:none;border-top:1px solid var(--hair);min-height:0}}
+
+.phone{position:relative;width:390px;height:844px;flex:none;background:#000;border:11px solid #000;
+  border-radius:46px;box-shadow:0 0 0 1.5px #363636,0 34px 70px -22px rgba(0,0,0,.7)}
+.phone-in{position:absolute;inset:0;border-radius:36px;overflow:hidden;background:var(--rs-bg);color-scheme:only dark}
+.island{position:absolute;top:9px;left:50%;transform:translateX(-50%);width:104px;height:30px;background:#000;
+  border-radius:16px;z-index:60;pointer-events:none}
+.sbar{position:absolute;top:0;left:0;right:0;height:50px;z-index:55;pointer-events:none;display:flex;
+  align-items:center;justify-content:space-between;padding:14px 28px 0 34px;font:600 15px/1 'Inter',sans-serif;color:#fff;transition:color .3s}
+.sbar.dk{color:#111}
+.sbar .glyphs{display:flex;gap:5px;align-items:center}
+.homebar{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:134px;height:5px;
+  border-radius:3px;background:rgba(255,255,255,.9);z-index:56;pointer-events:none;transition:background .3s}
+.homebar.dk{background:#111}
+.screenwrap{position:absolute;inset:0;overflow:hidden;background:var(--rs-bg)}
+
+/* ============ phone screens — REFSIX's system, all prefixed scr-/rs- ============ */
+.scr{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--rs-bg);color:var(--rs-ink);
+  font-family:'Inter',-apple-system,sans-serif;
+  transform:translateX(100%);transition:transform .36s cubic-bezier(.32,.72,0,1);z-index:10;will-change:transform}
+.scr.is-active{transform:translateX(0);z-index:20}
+.scr.is-past{transform:translateX(-24%)}
+.scr.sheet{transform:translateY(100%)}
+.scr.sheet.is-active{transform:translateY(0);z-index:30}
+.scr.nofx{transition:none}
+.scr-top{flex:none;padding:50px 0 0;position:relative;z-index:2}
+.scr-body{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:0 12px;scrollbar-width:none;position:relative;z-index:2}
+.scr-body::-webkit-scrollbar{display:none}
+.scr-foot{flex:none;padding:10px 4px 28px;position:relative;z-index:2}
+
+/* their header: centred title, hairline, short lime progress bar */
+.rs-hd{height:46px;display:flex;align-items:center;justify-content:center;position:relative;
+  font:600 17px/1 'Inter',sans-serif;color:var(--rs-ink);border-bottom:1px solid var(--rs-card);background:var(--rs-bar)}
+.rs-hd .bk{position:absolute;left:8px;top:7px;width:32px;height:32px;display:grid;place-items:center;color:var(--rs-lime-t)}
+.rs-hd .bk svg{width:20px;height:20px}
+.rs-prog{height:4px;margin:10px 0 0;position:relative}
+.rs-prog i{position:absolute;left:0;top:0;height:3px;background:var(--rs-lime);transition:width .4s cubic-bezier(.32,.72,0,1)}
+.rs-h{font:600 20px/1.25 'Inter',sans-serif;color:var(--rs-lime-t);text-align:center;margin:20px 10px 0;letter-spacing:-.01em}
+.rs-sub{font-size:13.5px;color:var(--rs-muted);text-align:center;margin-top:6px}
+
+.rs-btn{display:block;width:100%;height:48px;border-radius:var(--r-ctl);background:var(--rs-lime);color:var(--rs-on-lime);
+  font:600 17px/1 'Inter',sans-serif;transition:filter .15s}
+.rs-btn:hover{filter:brightness(1.04)}
+.rs-btn[disabled]{opacity:.45;cursor:default}
+.rs-ghost{display:block;width:100%;height:40px;margin-top:4px;font:500 14.5px/1 'Inter',sans-serif;color:var(--rs-ink2)}
+
+/* grouped form — their profile card */
+.rs-group{background:var(--rs-card);border-radius:10px;overflow:hidden;margin-top:18px}
+.rs-f{display:flex;align-items:center;justify-content:space-between;gap:10px;height:52px;padding:0 14px 0 18px;
+  border-top:1px solid #2A2A2A;font-size:15px;color:var(--rs-ink)}
+.rs-f:first-child{border-top:none}
+.rs-f.req{background:var(--rs-red)}
+.rs-f input,.rs-f select{background:transparent;border:none;outline:none;color:var(--rs-ink);font:400 15px 'Inter',sans-serif;
+  text-align:right;min-width:0;flex:1;-webkit-appearance:none;appearance:none}
+.rs-f select{direction:rtl;padding-right:4px;cursor:pointer}
+.rs-f select option{direction:ltr;background:#212121;color:#fff}
+.rs-f .ud{width:16px;height:16px;flex:none;color:#9A9A9A}
+.rs-f label{flex:none}
+
+/* list rows — their "About you" / watch rows */
+.rs-list{background:var(--rs-card);border-radius:10px;overflow:hidden;margin-top:18px}
+.rs-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;min-height:50px;
+  padding:10px 14px 10px 16px;border-top:1px solid #2A2A2A;font:400 15.5px/1.3 'Inter',sans-serif;color:var(--rs-ink)}
+.rs-row:first-child{border-top:none}
+.rs-chev{width:18px;height:18px;flex:none;color:var(--rs-lime-t)}
+.rs-ck{width:24px;height:24px;flex:none;border-radius:50%;border:1.5px solid #555;display:grid;place-items:center;transition:.15s}
+.rs-ck svg{width:13px;height:13px;stroke:var(--rs-on-lime);stroke-width:3.2;fill:none;stroke-linecap:round;stroke-linejoin:round;opacity:0}
+.rs-row.on .rs-ck{background:var(--rs-lime);border-color:var(--rs-lime)}
+.rs-row.on .rs-ck svg{opacity:1}
+.rs-row .em{font-size:19px;width:26px;flex:none;text-align:center}
+.rs-row .lbl{flex:1}
+.rs-other{margin:4px 10px 12px 16px;height:36px;border-radius:6px;background:#141414;color:#8C8C8C;font-size:13px;display:flex;align-items:center;padding:0 10px}
+
+/* watch tiles — their logo rows */
+.rs-nowatch{margin-top:24px;padding:22px 10px 20px;border-radius:12px;background:#1C1C1C;text-align:center}
+.rs-nowatch b{display:block;font:600 17px/1.2 'Inter',sans-serif;color:var(--rs-lime-t)}
+.rs-nowatch span{display:block;font-size:15.5px;color:var(--rs-ink);margin-top:14px}
+.rs-wlist{background:var(--rs-card);border-radius:12px;margin-top:22px;padding:4px 0}
+.rs-wrow{display:flex;align-items:center;justify-content:space-between;width:100%;height:72px;padding:0 16px 0 18px}
+.rs-wrow img{display:block;height:22px;width:auto}
+.rs-wrow img.apple{height:23px}
+.rs-wrow.on{background:rgba(211,230,46,.08)}
+.rs-wsolo{background:var(--rs-card);border-radius:12px;margin-top:22px;height:52px;display:flex;align-items:center;justify-content:space-between;
+  width:100%;padding:0 16px 0 18px;font:400 19px/1 'Inter',sans-serif;color:var(--rs-ink)}
+
+/* loader — their "Finding your watch" watch */
+.rs-loadwrap{display:flex;flex-direction:column;align-items:center;padding-top:40px}
+.rs-watch{width:150px;height:184px;border-radius:30px;background:#222;padding:10px;position:relative;box-shadow:0 0 0 1px #2B2B2B}
+.rs-watch::after{content:'';position:absolute;right:-7px;top:46px;width:7px;height:30px;border-radius:0 4px 4px 0;background:#2A2A2A}
+.rs-wface{width:100%;height:100%;border-radius:22px;background:#000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;
+  font:500 13px/1.3 'Inter',sans-serif;color:#fff;text-align:center;padding:0 8px}
+.rs-spin{width:26px;height:26px;animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.rs-lsteps{width:100%;max-width:300px;display:flex;flex-direction:column;gap:13px;margin-top:34px}
+.rs-ls{display:flex;align-items:center;gap:11px;font-size:14.5px;font-weight:500;color:#6A6A6A;transition:.35s}
+.rs-ls.on{color:var(--rs-ink)}
+.rs-ls .d{width:22px;height:22px;flex:none;border-radius:50%;border:1.5px solid #4A4A4A;display:grid;place-items:center;transition:.35s}
+.rs-ls.on .d{background:var(--rs-lime);border-color:var(--rs-lime)}
+.rs-ls .d svg{width:12px;height:12px;stroke:#111;stroke-width:3.2;fill:none;opacity:0;stroke-linecap:round;stroke-linejoin:round}
+.rs-ls.on .d svg{opacity:1}
+
+/* payoff */
+.rs-prochip{display:inline-flex;align-items:center;gap:8px;background:#232323;border-radius:8px;padding:5px 12px 5px 6px;
+  font:700 15px/1 'Inter',sans-serif;color:var(--rs-ink)}
+.rs-prochip img{width:26px;height:auto;display:block}
+.rs-poh{font:700 22px/1.22 'Inter',sans-serif;color:var(--rs-ink);margin:14px 2px 0;letter-spacing:-.015em}
+.rs-lab{font-size:12px;font-weight:700;letter-spacing:.08em;color:var(--rs-muted);margin:20px 2px 8px;text-transform:uppercase}
+.rs-gets{background:var(--rs-card);border-radius:12px;overflow:hidden}
+.rs-get{display:flex;gap:12px;padding:13px 14px;border-top:1px solid #2A2A2A;font-size:14.5px;line-height:1.38;color:var(--rs-ink2)}
+.rs-get:first-child{border-top:none}
+.rs-get .em{font-size:18px;width:24px;flex:none;text-align:center;line-height:1.2}
+.rs-get b{display:block;color:var(--rs-ink);font-weight:600;font-size:15px;margin-bottom:1px}
+.rs-proof{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}
+.rs-proof div{background:var(--rs-card);border-radius:12px;padding:12px 12px;text-align:center}
+.rs-proof b{display:block;font:700 17px/1.1 'Inter',sans-serif;color:var(--rs-lime-t)}
+.rs-proof span{display:block;font-size:12px;line-height:1.3;color:var(--rs-muted);margin-top:5px}
+
+/* paywall — their composition: wordmark bar, hero, headline, emoji list, plan cards */
+.scr--pay .scr-top{padding:50px 0 0;background:#181818}
+.rs-pbar{height:50px;display:flex;align-items:center;justify-content:center;position:relative}
+.rs-pbar img{height:30px;display:block}
+.rs-x{position:absolute;right:14px;top:9px;width:32px;height:32px;display:grid;place-items:center;color:#fff}
+.rs-x svg{width:22px;height:22px}
+.rs-hero{display:block;width:calc(100% + 24px);margin:0 -12px;height:150px;object-fit:cover;object-position:center 22%;background:#000}
+.rs-payh{font:700 18.5px/1.24 'Inter',sans-serif;color:var(--rs-ink);margin:12px 4px 0;letter-spacing:-.01em}
+.rs-paysub{font-size:13px;color:var(--rs-muted);margin:3px 4px 0}
+.rs-feat{display:flex;flex-direction:column;gap:5px;margin:10px 4px 0}
+.rs-fl{display:flex;align-items:center;gap:9px;font-size:14.5px;line-height:1.22;color:var(--rs-ink)}
+.rs-fl .em{width:22px;text-align:center;font-size:16px;flex:none}
+.rs-fl.hit{font-weight:600}
+.rs-fl.hit::after{content:'';width:6px;height:6px;border-radius:50%;background:var(--rs-lime);margin-left:2px}
+.rs-plans{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.rs-plan{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;text-align:left;border-radius:var(--r-media);
+  border:1.5px solid var(--rs-outline);padding:9px 14px 9px 16px;color:var(--rs-ink);transition:.16s;min-height:56px}
+.rs-plan .t{display:block;font:700 16px/1.2 'Inter',sans-serif}
+.rs-plan .s{display:block;font:400 15px/1.25 'Inter',sans-serif;margin-top:2px}
+.rs-plan .e{display:block;font:500 12px/1.25 'Inter',sans-serif;margin-top:3px;color:var(--rs-muted)}
+.rs-plan.on{background:var(--rs-lime);border-color:var(--rs-lime);color:#111}
+.rs-plan.on .e{color:#3B4200}
+.rs-plan .rt{display:flex;align-items:center;gap:8px;flex:none}
+.rs-pop{background:#000;color:var(--rs-lime);font:800 12.5px/1 'Inter',sans-serif;letter-spacing:.04em;padding:8px 12px;border-radius:14px;white-space:nowrap}
+.rs-tick{width:24px;height:24px;border-radius:50%;background:#000;display:grid;place-items:center;opacity:0}
+.rs-tick svg{width:13px;height:13px;stroke:#fff;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.rs-plan.on .rs-tick{opacity:1}
+.rs-trust{display:flex;align-items:center;justify-content:center;gap:8px;font-size:14.5px;color:var(--rs-ink);margin:0 0 10px}
+.rs-trust i{width:18px;height:18px;border-radius:50%;background:#fff;display:grid;place-items:center}
+.rs-trust i svg{width:11px;height:11px;stroke:#111;stroke-width:3.4;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.scr--pay .scr-foot{padding:10px 12px 26px}
+.scr--pay .rs-btn{height:52px;border-radius:24px;font-weight:500;font-size:19px}
+
+/* offer — trial timeline on their 14 free days */
+.scr--offer .scr-top{padding-top:50px}
+.rs-oclose{position:absolute;right:14px;top:58px;width:32px;height:32px;display:grid;place-items:center;color:var(--rs-ink)}
+.rs-oclose svg{width:22px;height:22px}
+.rs-ohead{text-align:center;padding-top:40px}
+.rs-ohead img{width:58px;height:auto;display:block;margin:0 auto}
+.rs-oh{font:700 24px/1.2 'Inter',sans-serif;color:var(--rs-ink);text-align:center;margin:16px 10px 0;letter-spacing:-.015em}
+.rs-oh em{font-style:normal;color:var(--rs-lime-t)}
+.rs-tl{margin:26px 6px 0;position:relative}
+.rs-tl::before{content:'';position:absolute;left:15px;top:20px;bottom:24px;width:2px;background:linear-gradient(var(--rs-lime),#3A3A3A)}
+.rs-ts{display:flex;gap:16px;position:relative;padding-bottom:22px}
+.rs-ts .n{width:32px;height:32px;flex:none;border-radius:50%;background:var(--rs-card);border:2px solid var(--rs-lime);display:grid;place-items:center;font-size:15px}
+.rs-ts:first-child .n{background:var(--rs-lime)}
+.rs-ts:last-child .n{border-color:#4A4A4A}
+.rs-ts b{display:block;font:700 16px/1.25 'Inter',sans-serif;color:var(--rs-ink);padding-top:5px}
+.rs-ts span{display:block;font-size:14px;line-height:1.42;color:var(--rs-ink2);margin-top:3px}
+.rs-onote{background:var(--rs-card);border-radius:12px;padding:12px 14px;font-size:13.5px;line-height:1.4;color:var(--rs-ink2);text-align:center;margin:4px 4px 0}
+.rs-onote b{color:var(--rs-ink)}
+
+/* home — their Matches screen */
+.rs-mhd{height:50px;display:flex;align-items:center;justify-content:center;position:relative;border-bottom:1px solid var(--rs-card);
+  font:600 18px/1 'Inter',sans-serif;color:var(--rs-ink)}
+.rs-mhd .pro{position:absolute;left:8px;top:6px;display:flex;align-items:center;gap:6px;background:#232323;border-radius:6px;padding:4px 9px 4px 5px;font:700 13px/1 'Inter',sans-serif}
+.rs-mhd .pro img{width:22px;display:block}
+.rs-mhd .ic{position:absolute;right:12px;top:13px;display:flex;gap:14px;color:var(--rs-lime)}
+.rs-mhd .ic svg{width:24px;height:24px}
+.rs-ng{text-align:center;font-size:14.5px;color:var(--rs-ink);margin-top:18px}
+.rs-cdn{display:flex;gap:9px;justify-content:center;margin-top:10px}
+.rs-cdn div{width:52px;border-radius:7px;background:var(--rs-card);padding:8px 0 6px;text-align:center}
+.rs-cdn b{display:block;font:500 20px/1 'Inter',sans-serif;color:var(--rs-lime-t)}
+.rs-cdn span{display:block;font-size:12px;color:#5A5A5A;margin-top:4px}
+.rs-empty{margin:30px 4px 0;padding:22px 18px;border-radius:12px;background:#1B1B1B;text-align:center;font-size:15px;color:var(--rs-ink)}
+.rs-empty .rs-btn{margin-top:22px;border-radius:14px}
+.rs-tabs{display:flex;justify-content:space-around;align-items:flex-end;padding:8px 6px 26px;border-top:1px solid var(--rs-card);background:var(--rs-bar)}
+.rs-tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:#8C8C8C;width:60px}
+.rs-tab svg{width:24px;height:24px}
+.rs-tab.on{color:var(--rs-lime-t)}
+.rs-plus{width:52px;height:52px;border-radius:50%;background:var(--rs-lime);display:grid;place-items:center;color:#111;margin-bottom:6px}
+.rs-plus svg{width:26px;height:26px}
+
+/* light mode — an approximation: REFSIX ships dark, no light frames were supplied */
+.phone-in.light{--rs-bg:#F2F2F0;--rs-bar:#F7F7F5;--rs-card:#FFFFFF;--rs-line:#E3E3E0;--rs-outline:#CFCFCB;
+  --rs-ink:#141414;--rs-ink2:#3A3A3A;--rs-muted:#767676;--rs-lime-t:#677500;--rs-red:#F8DCDA;background:var(--rs-bg);color-scheme:only light}
+.phone-in.light .screenwrap{background:var(--rs-bg)}
+.phone-in.light .rs-f,.phone-in.light .rs-row,.phone-in.light .rs-get{border-top-color:#ECECEA}
+.phone-in.light .rs-f select option{background:#fff;color:#111}
+.phone-in.light .rs-nowatch{background:#E9E9E6}
+.phone-in.light .rs-wrow img{filter:invert(1)}
+.phone-in.light .rs-wrow.on{background:rgba(103,117,0,.08)}
+.phone-in.light .rs-watch{background:#DADAD6;box-shadow:none}
+.phone-in.light .rs-watch::after{background:#CFCFCB}
+.phone-in.light .rs-ls{color:#A5A5A5}
+.phone-in.light .rs-ls .d{border-color:#C8C8C4}
+.phone-in.light .rs-prochip,.phone-in.light .rs-mhd .pro{background:#E6E6E2}
+.phone-in.light .rs-other{background:#F2F2F0;color:#8A8A8A}
+.phone-in.light .rs-empty{background:#E9E9E6}
+.phone-in.light .rs-cdn span{color:#9A9A9A}
+.phone-in.light .scr--pay .scr-top{background:#181818}
+.phone-in.light .rs-trust i{background:#111}
+.phone-in.light .rs-trust i svg{stroke:#fff}
+.phone-in.light .rs-ts .n{background:#fff}
+.phone-in.light .rs-ts:first-child .n{background:var(--rs-lime)}
+.phone-in.light .rs-ts:last-child .n{border-color:#C8C8C4}
+.phone-in.light .rs-tl::before{background:linear-gradient(var(--rs-lime),#D0D0CC)}
+
+/* prototype toolbar, walkthrough, QR */
+.tools{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;max-width:520px}
+.seg{display:inline-flex;align-items:center;background:#212121;border:1px solid #333;border-radius:20px;padding:3px;gap:2px}
+.seg button{padding:6px 11px;border-radius:16px;font:600 12px/1 'Plus Jakarta Sans',sans-serif;color:var(--ink2);transition:.14s}
+.seg button.on{background:var(--ink);color:#141414}
+.demo-btn{display:inline-flex;align-items:center;gap:7px;padding:9px 14px;border-radius:20px;background:var(--accent);color:var(--on-accent);
+  font:700 12px/1 'Plus Jakarta Sans',sans-serif}
+.demo-cap{width:390px;max-width:calc(100vw - 24px);background:#232323;border:1px solid #333;border-radius:16px;padding:14px 14px 12px;
+  display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;box-shadow:0 4px 18px rgba(0,0,0,.3)}
+.demo-cap .bar{position:absolute;left:0;top:0;right:0;height:3px;background:#333}
+.demo-cap .bar i{display:block;height:100%;width:0;background:var(--accent);transition:width .25s linear}
+.demo-cap p{flex:1;font-size:13.5px;line-height:1.45;color:var(--ink);margin:0;font-weight:500}
+.demo-cap button{font:700 12px/1 'Plus Jakarta Sans',sans-serif;color:var(--ink2);padding:7px 10px;border-radius:12px;border:1px solid #3A3A3A;flex:none}
+.finger{position:absolute;z-index:90;width:46px;height:46px;margin:-23px 0 0 -23px;border-radius:50%;background:rgba(255,255,255,.28);
+  border:2px solid rgba(255,255,255,.95);box-shadow:0 4px 14px rgba(0,0,0,.35);pointer-events:none;opacity:0;left:50%;top:60%;
+  transition:left .32s cubic-bezier(.4,0,.2,1),top .32s cubic-bezier(.4,0,.2,1),opacity .2s,transform .15s}
+.finger.show{opacity:1}
+.finger.press{transform:scale(.78);background:rgba(255,255,255,.45)}
+.qr{display:flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--hair);border-radius:16px;padding:10px 16px 10px 10px;text-align:left}
+.qr img{width:123px;height:123px;display:block;image-rendering:pixelated;border-radius:6px}
+.qr span{font-size:12.5px;line-height:1.45;color:#4A4A4A}
+.qr b{display:block;color:#141414;font-size:13.5px}
+@media(max-width:1080px){.qr{display:none}}
+
+#view-proto .tools{order:0} #view-proto .demo-cap{order:1} #view-proto .phone{order:2} #view-proto .chips{order:3}
+#view-proto .chiphint{order:4} #view-proto .qr{order:5}
+.cta-row .qr{order:2}
+/* on a phone: the prototype is the screen */
+@media(max-width:500px){
+  #view-proto .phonecol{padding:0 0 28px;gap:14px}
+  #view-proto .phone{width:100vw;height:calc(100svh - 58px);min-height:640px;border:0;border-radius:0;box-shadow:none;order:1}
+  #view-proto .phone-in{border-radius:0}
+  #view-proto .island,#view-proto .sbar,#view-proto .homebar{display:none}
+  #view-proto .scr-top{padding-top:8px}
+  #view-proto .scr-foot{padding-bottom:16px}
+  #view-proto .rs-oclose{top:14px}
+  #view-proto .rs-tabs{padding-bottom:12px}
+  #view-proto .tools{order:3;padding:0 12px}
+  #view-proto .demo-cap{position:fixed;left:12px;right:12px;bottom:12px;width:auto;max-width:none;z-index:95}
+  #view-proto .chips{order:4;padding:0 12px}
+  #view-proto .chiphint{order:5}
+}
+
+/* overview: walkthrough button */
+.herobtns{display:flex;justify-content:center;margin-top:30px}
+.ghostbtn{display:inline-flex;align-items:center;gap:10px;background:#212121;border:1px solid var(--hair2);color:var(--ink);font-size:14px;
+  font-weight:700;padding:9px 20px 9px 9px;border-radius:30px;transition:.16s}
+.ghostbtn:hover{background:#262626}
+.ghostbtn .pl{width:30px;height:30px;border-radius:50%;background:var(--accent);display:grid;place-items:center}
+.ghostbtn .pl svg{width:12px;height:12px;fill:#111;margin-left:2px}
+
+/* chips */
+.chips{display:flex;flex-wrap:wrap;gap:6px;justify-content:center;max-width:470px;margin:0 auto}
+.chip{padding:7px 13px;border-radius:20px;border:1px solid #333;background:#212121;
+  font:600 12px/1 'Plus Jakarta Sans',sans-serif;color:var(--ink2);transition:.14s}
+.chip:hover{color:var(--ink);border-color:#4A4A4A}
+.chip.offer{border-style:dashed;border-color:var(--accent);color:var(--accent-lift)}
+.chip.on{background:var(--accent);border-color:var(--accent);color:var(--on-accent);border-style:solid}
+.chiphint{text-align:center;font-size:11px;color:var(--ink3);margin:0;max-width:430px}
+
+/* ============ the short panel ============ */
+.pn{padding:30px 30px 60px}
+.pn-n{font-size:10.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--accent-ink)}
+.pn-n.ctx{color:var(--panel-muted)}
+.pn-t{font-size:23px;line-height:1.18;font-weight:700;letter-spacing:-.028em;margin:8px 0 0;color:var(--panel-ink)}
+.pn-hyp{font-size:15px;line-height:1.62;color:#2E353B;margin:16px 0 0}
+.pn-hyp b{font-weight:700;color:var(--panel-ink)}
+.pn-out{margin-top:22px;border-top:1px solid var(--panel-line);padding-top:18px}
+.pn-out .lab{font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:var(--panel-muted)}
+.pn-out .v{font-size:31px;font-weight:700;letter-spacing:-.035em;color:var(--accent-ink);margin-top:7px;line-height:1}
+.pn-kept{margin-top:22px;font-size:12.5px;line-height:1.55;color:var(--panel-muted)}
+.pn-kept b{color:#2E353B;font-weight:700}
+.pn-foot{font-size:11.5px;line-height:1.55;color:var(--panel-muted);border-top:1px solid var(--panel-line);
+  padding-top:14px;margin-top:26px}
+.pn-sep{height:1px;background:var(--panel-line);margin:26px 0}
+.hidden{display:none !important}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <div class="nav-in">
+    <div class="nav-brand">
+      <span class="mk"><img src="img/icon.jpg" alt="REFSIX"></span>
+      <b>Growth Audit</b><span>· REFSIX</span>
+    </div>
+    <div class="nav-links">
+      <button class="on" data-view="over">Overview</button>
+      <button data-view="proto">Prototype</button>
+    </div>
+  </div>
+</div>
+
+<!-- ======================= OVERVIEW ======================= -->
+<div class="view on" id="view-over">
+
+<div class="hero">
+  <div class="wrap">
+    <!-- month + year = the day you build -->
+    <div class="eyebrow">Growth Audit · November 2026</div>
+    <h1>REFSIX</h1>
+    <p class="lede">Five ideas to unlock more revenue from the traffic you already have.</p>
+    <div class="meta">Prepared by <b>Adapty</b> · based on your live iOS flow and your App Store listing</div>
+    <div class="herobtns"><button class="ghostbtn" data-demo><span class="pl"><svg viewBox="0 0 24 24"><path d="M7 4.5v15l12-7.5z"/></svg></span>Watch the 30-second walkthrough</button></div>
+    <div class="stats">
+      <div class="stat"><b>30,000+</b><span>apps run subscriptions<br>on Adapty</span></div>
+      <div class="stat"><b>5</b><span>ideas, each rebuilt<br>as a working screen</span></div>
+      <div class="stat"><b>0</b><span>design changes<br>to your art direction</span></div>
+    </div>
+
+    <div class="fb">
+      <div class="fb-k">Built in Adapty Flow Builder</div>
+      <div class="fb-i">
+        <span class="tick"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <p><b>Millions of dollars</b> in subscription revenue pass through Flow Builder every month.</p>
+      </div>
+      <div class="fb-i">
+        <span class="tick"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>
+        <p><b>Nearly 500 apps</b> actively build their paywalls and onboarding in it — plenty of them past $100K MRR.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="wrap">
+    <div class="sec-k">What this is</div>
+    <h2>We set up REFSIX the way a new referee does, then rebuilt the parts we think are leaving money on the table.</h2>
+    <p class="body">Adapty powers subscriptions for <b>30,000+ apps</b>, so we get to see what actually moves conversion and ARPU across the market rather than inside one app. We pointed that at REFSIX: installed it, filled in the profile, went through watch pairing, read your App Store listing and your PRO pages, and looked for gaps between what you already have and what you currently show people.</p>
+    <p class="body">What follows is five ideas — not fifteen. Each one is a hypothesis you can A/B test, and each one is built into a clickable prototype so you can see it rather than imagine it. <b>The prototype uses your design, not ours.</b></p>
+
+    <div class="notes">
+      <div class="note">
+        <h4>We did not redesign your app</h4>
+        <p>Every screen in the prototype is yours — your lime, your grouped profile form, your watch logo rows, your heatmap paywall and your Matches screen. Only the order changed, plus a few things you already own but do not show at the right moment. This is not a design pitch.</p>
+      </div>
+      <div class="note">
+        <h4>You may have tested some of this</h4>
+        <p>We are working from the outside, so we cannot see your experiment history. If one of these is something you have already run, tell us — we will go deeper on the rest rather than repeat it.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="rule"></div>
+
+<div class="sec">
+  <div class="wrap">
+    <div class="sec-k">The five ideas</div>
+    <h2>Ranked by what we would test first.</h2>
+    <p class="body">Each one links straight to the screen in the prototype.</p>
+
+    <div class="ideas">
+      <button class="idea" data-jump="payoff">
+        <span class="no">01</span>
+        <span>
+          <h3>Show PRO at the end of setup</h3>
+          <p>Today a new referee fills in the profile, says where they heard about you, pairs a watch and lands on Matches. PRO starts silently as a “14 Days left” badge, and the only way to the paywall is “Go PRO now!”, seventh row in the More menu.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>CR +10–20%</b><span>to purchase</span></span>
+      </button>
+
+      <button class="idea" data-jump="offer">
+        <span class="no">02</span>
+        <span>
+          <h3>Make the 14 free days the second chance</h3>
+          <p>You already give every new account 14 days of PRO, before anyone has seen a price. Show the paywall first. If they close it, offer those same 14 days as a short timeline: PRO today, a heatmap after the first match, a choice on day 14.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>ARPU +10–15%</b><span>second chance</span></span>
+      </button>
+
+      <button class="idea" data-jump="paywall">
+        <span class="no">03</span>
+        <span>
+          <h3>Put their goal in the paywall headline</h3>
+          <p>The paywall says “Upgrade to REFSIX PRO to unlock our premium features” to everyone. A referee who wants to fix their positioning should read that in the headline, with Heatmaps first in your list and their own watch named underneath.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>CR +15–20%</b><span>to purchase</span></span>
+      </button>
+
+      <button class="idea" data-jump="goal">
+        <span class="no">04</span>
+        <span>
+          <h3>Ask what they want to improve, then read it back</h3>
+          <p>The profile asks for country, FA and referee level, and nothing comes back from it. One extra question (positioning, fitness, timing, admin, promotion) maps straight onto your PRO features, and the setup screen reads every answer back.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>CR +10–15%</b><span>to purchase</span></span>
+      </button>
+
+      <button class="idea" data-jump="paywall">
+        <span class="no">05</span>
+        <span>
+          <h3>Show what the yearly plan saves</h3>
+          <p>69,99 € a year sits next to 9,99 € a month with only “Most popular” between them. It is never shown as 5,83 € a month, or as 42% less than paying monthly for a year.</p>
+          <span class="seeit">See the screen <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span>
+        </span>
+        <span class="out"><b>ARPU +10–15%</b><span>annual mix</span></span>
+      </button>
+    </div>
+
+    <div class="band">
+      <div class="txt">
+        <div class="lab">Potential result</div>
+        <p>Run together, these five move the same funnel at three points: when PRO first appears, what the paywall says, and what happens when a referee says no.</p>
+      </div>
+      <div class="nums">
+        <div><b>up to +25%</b><span>CR to purchase</span></div>
+        <div><b>up to +30%</b><span>ARPU</span></div>
+      </div>
+    </div>
+
+    <div class="cta-row">
+      <div class="qr"><img src="img/qr.svg" alt="QR code for the prototype"><span><b>Or open it on your phone</b>Scan to try the flow in your hand.</span></div>
+      <button class="bigbtn" data-view="proto">Open the prototype
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="foot">
+  <div class="wrap">
+    Impact ranges are Adapty's expected effect from teardowns and A/B tests across subscription apps — not measured lift for REFSIX. Every price, rating, quote and feature line here and in the prototype comes from REFSIX's own App Store listing, website, PRO page and in-app screens.
+  </div>
+</div>
+</div><!-- /view-over -->
+
+<!-- ======================= PROTOTYPE ======================= -->
+<div class="view" id="view-proto">
+<div class="stage">
+  <div class="phonecol">
+    <div class="tools" id="tools">
+      <div class="seg" id="segLang"><button data-lang="en" class="on">EN</button><button data-lang="nl">NL</button><button data-lang="da">DA</button></div>
+      <div class="seg" id="segTheme"><button data-theme="dark" class="on">Dark</button><button data-theme="light">Light</button></div>
+      <button class="demo-btn" id="demoBtn"><svg viewBox="0 0 24 24" width="11" height="11" fill="currentColor"><path d="M7 4.5v15l12-7.5z"/></svg>30-sec walkthrough</button>
+    </div>
+    <div class="phone">
+      <div class="phone-in" id="phoneIn">
+        <div class="island"></div>
+        <div class="sbar" id="sbar">
+          <span>14:22</span>
+          <span class="glyphs">
+            <svg width="17" height="11" viewBox="0 0 17 11" fill="currentColor"><rect x="0" y="7.5" width="3" height="3.5" rx="1"/><rect x="4.5" y="5.5" width="3" height="5.5" rx="1"/><rect x="9" y="3" width="3" height="8" rx="1"/><rect x="13.5" y="0" width="3" height="11" rx="1"/></svg>
+            <svg width="16" height="11" viewBox="0 0 16 11" fill="currentColor"><path d="M8 10.5 5.6 7.9a3.4 3.4 0 0 1 4.8 0L8 10.5Zm0-5.6a6.4 6.4 0 0 0-4.5 1.9L1.7 4.9a9 9 0 0 1 12.6 0l-1.8 1.9A6.4 6.4 0 0 0 8 4.9Z"/></svg>
+            <svg width="25" height="12" viewBox="0 0 25 12" fill="none"><rect x=".6" y=".6" width="20" height="10.8" rx="3" stroke="currentColor" stroke-opacity=".5"/><rect x="2.2" y="2.2" width="16.5" height="7.6" rx="1.8" fill="currentColor"/><path d="M22.3 4.1v3.8a2 2 0 0 0 0-3.8Z" fill="currentColor" fill-opacity=".5"/></svg>
+          </span>
+        </div>
+        <div class="homebar" id="homebar"></div>
+        <div class="finger" id="finger"></div>
+        <div class="screenwrap">
+
+<!-- PROFILE -->
+<section class="scr" data-id="profile">
+  <div class="scr-top">
+    <div class="rs-hd" data-t="t.profile"></div>
+    <div class="rs-prog"><i style="width:10%"></i></div>
+  </div>
+  <div class="scr-body">
+    <h2 class="rs-h" data-t="pr.h"></h2>
+    <div class="rs-group">
+      <div class="rs-f"><label for="fFirst" data-t="pr.first"></label><input id="fFirst" autocomplete="off"></div>
+      <div class="rs-f"><label for="fLast" data-t="pr.last"></label><input id="fLast" autocomplete="off"></div>
+      <div class="rs-f"><label for="fCountry" data-t="pr.country"></label><select id="fCountry"></select><svg class="ud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 9 5-5 5 5M7 15l5 5 5-5"/></svg></div>
+      <div class="rs-f"><label for="fFa" data-t="pr.fa"></label><select id="fFa"></select><svg class="ud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m7 9 5-5 5 5M7 15l5 5 5-5"/></svg></div>
+      <div class="rs-f" id="rowLevel"><label for="fLevel" data-t="pr.level"></label><input id="fLevel" autocomplete="off"></div>
+    </div>
+  </div>
+  <div class="scr-foot"><button class="rs-btn" id="profBtn" data-go="goal" data-t="next"></button></div>
+</section>
+
+<!-- GOAL (new) -->
+<section class="scr" data-id="goal">
+  <div class="scr-top">
+    <div class="rs-hd"><button class="bk" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span data-t="t.about"></span></div>
+    <div class="rs-prog"><i style="width:30%"></i></div>
+  </div>
+  <div class="scr-body">
+    <h2 class="rs-h" data-t="goal.h"></h2>
+    <p class="rs-sub" data-t="goal.sub"></p>
+    <div class="rs-list" id="goalList"></div>
+  </div>
+  <div class="scr-foot"><button class="rs-btn" id="goalBtn" data-go="watch" data-t="next"></button></div>
+</section>
+
+<!-- WATCH -->
+<section class="scr" data-id="watch">
+  <div class="scr-top">
+    <div class="rs-hd"><button class="bk" data-back aria-label="Back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg></button><span data-t="t.start"></span></div>
+    <div class="rs-prog"><i style="width:50%"></i></div>
+  </div>
+  <div class="scr-body">
+    <div class="rs-nowatch"><b data-t="w.none"></b><span data-t="w.pair"></span></div>
+    <div class="rs-wlist" id="watchList">
+      <button class="rs-wrow" data-w="garmin"><img src="img/garmin-a.png" alt="Garmin"><svg class="rs-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button class="rs-wrow" data-w="samsung"><img src="img/samsung-a.png" alt="Samsung"><svg class="rs-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button class="rs-wrow" data-w="wearos"><img src="img/wearos-a.png" alt="Wear OS by Google"><svg class="rs-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+      <button class="rs-wrow" data-w="apple"><img class="apple" src="img/applewatch-a.png" alt="Apple Watch Family Member"><svg class="rs-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+    </div>
+    <button class="rs-wsolo" data-w="none"><span data-t="w.nowatch"></span><svg class="rs-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg></button>
+  </div>
+  <div class="scr-foot"></div>
+</section>
+
+<!-- LOADER -->
+<section class="scr" data-id="loader">
+  <div class="scr-top">
+    <div class="rs-hd" data-t="t.start"></div>
+    <div class="rs-prog"><i style="width:70%"></i></div>
+  </div>
+  <div class="scr-body">
+    <div class="rs-loadwrap">
+      <div class="rs-watch"><div class="rs-wface"><span data-t="ld.h"></span><svg class="rs-spin" viewBox="0 0 24 24" fill="none" stroke="#D3E62E" stroke-width="2.4" stroke-linecap="round"><path d="M12 3a9 9 0 0 1 9 9"/></svg></div></div>
+      <div class="rs-lsteps" id="loadSteps">
+        <div class="rs-ls"><span class="d"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="t">—</span></div>
+        <div class="rs-ls"><span class="d"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="t">—</span></div>
+        <div class="rs-ls"><span class="d"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="t">—</span></div>
+        <div class="rs-ls"><span class="d"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span><span class="t">—</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="scr-foot"></div>
+</section>
+
+<!-- PAYOFF -->
+<section class="scr" data-id="payoff">
+  <div class="scr-top">
+    <div class="rs-hd" data-t="t.start"></div>
+    <div class="rs-prog"><i style="width:90%"></i></div>
+  </div>
+  <div class="scr-body">
+    <div style="height:14px"></div>
+    <span class="rs-prochip"><img src="img/proshield.png" alt="PRO"><span data-t="hm.left"></span></span>
+    <h2 class="rs-poh" id="poH"></h2>
+    <div class="rs-lab" data-t="po.lab"></div>
+    <div class="rs-gets" id="poGets"></div>
+    <div class="rs-proof">
+      <div><b data-t="po.p1b"></b><span data-t="po.p1"></span></div>
+      <div><b data-t="po.p2b"></b><span data-t="po.p2"></span></div>
+    </div>
+    <div style="height:10px"></div>
+  </div>
+  <div class="scr-foot"><button class="rs-btn" data-go="paywall" data-t="cont"></button></div>
+</section>
+
+<!-- PAYWALL -->
+<section class="scr scr--pay" data-id="paywall">
+  <div class="scr-top">
+    <div class="rs-pbar"><img src="img/wordmark-a.png" alt="REFSIX">
+      <button class="rs-x" id="payClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button></div>
+  </div>
+  <div class="scr-body">
+    <img class="rs-hero" src="img/hero.jpg" alt="REFSIX heatmap, sprint map and watch timer">
+    <h2 class="rs-payh" id="payH"></h2>
+    <p class="rs-paysub" id="paySub"></p>
+    <div class="rs-feat" id="featList"></div>
+    <div class="rs-plans" id="planList">
+      <button class="rs-plan" data-v="year">
+        <span><span class="t" data-t="pw.year"></span><span class="s" data-t="pw.yearP"></span><span class="e" data-t="pw.yearE"></span></span>
+        <span class="rt"><span class="rs-pop" data-t="pw.pop"></span><span class="rs-tick"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+      </button>
+      <button class="rs-plan" data-v="month">
+        <span><span class="t" data-t="pw.month"></span><span class="s" data-t="pw.monthP"></span></span>
+        <span class="rt"><span class="rs-tick"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span></span>
+      </button>
+    </div>
+    <div style="height:6px"></div>
+  </div>
+  <div class="scr-foot">
+    <p class="rs-trust"><i><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></i><span data-t="pw.trust"></span></p>
+    <button class="rs-btn" id="payCta" data-t="cont"></button>
+  </div>
+</section>
+
+<!-- OFFER -->
+<section class="scr scr--offer sheet" data-id="offer">
+  <button class="rs-oclose" id="offClose" aria-label="Close"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+  <div class="scr-top"></div>
+  <div class="scr-body">
+    <div class="rs-ohead"><img src="img/proshield.png" alt="PRO"></div>
+    <h2 class="rs-oh" data-th="of.h"></h2>
+    <div class="rs-tl">
+      <div class="rs-ts"><span class="n">🔓</span><div><b data-t="of.t1"></b><span id="ofD1"></span></div></div>
+      <div class="rs-ts"><span class="n">🔥</span><div><b data-t="of.t2"></b><span data-t="of.d2"></span></div></div>
+      <div class="rs-ts"><span class="n">📅</span><div><b data-t="of.t3"></b><span data-t="of.d3"></span></div></div>
+    </div>
+    <p class="rs-onote" data-th="of.note"></p>
+    <div style="height:8px"></div>
+  </div>
+  <div class="scr-foot">
+    <button class="rs-btn" id="offerCta" data-t="of.cta"></button>
+    <button class="rs-ghost" id="offerPlans" data-t="of.plans"></button>
+  </div>
+</section>
+
+<!-- WHERE DID YOU HEAR (moved past the paywall) -->
+<section class="scr" data-id="hear">
+  <div class="scr-top">
+    <div class="rs-hd" data-t="t.about"></div>
+    <div class="rs-prog"><i style="width:95%"></i></div>
+  </div>
+  <div class="scr-body">
+    <h2 class="rs-h" data-t="hear.h"></h2>
+    <div class="rs-list" id="hearList"></div>
+  </div>
+  <div class="scr-foot"><button class="rs-btn" data-go="home" data-t="next"></button></div>
+</section>
+
+<!-- HOME -->
+<section class="scr" data-id="home">
+  <div class="scr-top">
+    <div class="rs-mhd"><span class="pro"><img src="img/proshield.png" alt="PRO"><span data-t="hm.left"></span></span><span data-t="hm.t"></span>
+      <span class="ic"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="5" width="18" height="16" rx="3"/><g fill="#111"><circle cx="8" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="16" cy="12" r="1.2"/><circle cx="8" cy="16" r="1.2"/><circle cx="12" cy="16" r="1.2"/></g><rect x="7" y="2.5" width="2" height="4" rx="1"/><rect x="15" y="2.5" width="2" height="4" rx="1"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M3 6h18M7 12h10M10 18h4"/></svg></span></div>
+  </div>
+  <div class="scr-body">
+    <p class="rs-ng" data-t="hm.next"></p>
+    <div class="rs-cdn"><div><b>0</b><span data-t="hm.d"></span></div><div><b>0</b><span data-t="hm.h"></span></div><div><b>0</b><span data-t="hm.m"></span></div></div>
+    <div class="rs-empty"><span data-t="hm.none"></span><button class="rs-btn" data-t="hm.add"></button></div>
+  </div>
+  <div class="rs-tabs">
+    <span class="rs-tab on"><svg viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="5" width="18" height="16" rx="3"/><rect x="7" y="2.5" width="2" height="4" rx="1"/><rect x="15" y="2.5" width="2" height="4" rx="1"/></svg><span data-t="hm.tf"></span></span>
+    <span class="rs-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 9h16v10H4zM6 9l2-4h8l2 4M8 13h8"/></svg><span data-t="hm.tr"></span></span>
+    <span class="rs-plus"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></span>
+    <span class="rs-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V4M8 20v-8M12 20v-5M16 20V9M20 20v-6"/></svg><span data-t="hm.tt"></span></span>
+    <span class="rs-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg><span data-t="hm.tm"></span></span>
+  </div>
+</section>
+
+        </div>
+      </div>
+    </div>
+    <div class="demo-cap hidden" id="demoCap"><div class="bar"><i id="demoProg"></i></div><p id="demoTxt"></p><button id="demoStop">Stop</button></div>
+    <div class="chips" id="chips"></div>
+    <p class="chiphint">Jump to any screen — answers already filled in.</p>
+    <div class="qr"><img src="img/qr.svg" alt="QR code for this prototype"><span><b>Open it on your phone</b>Scan to try the flow in your hand.</span></div>
+  </div>
+  <div class="panelcol"><div class="pn" id="panel"></div></div>
+</div>
+</div><!-- /view-proto -->
+
+<script>
+/* ================= copy, per language (phone screens only) ================= */
+var LANGS = ['en','nl','da'];
+var T = {
+ 't.profile':["Profile","Profiel","Profil"],
+ 'pr.h':["Let us know about you.","Vertel ons over jezelf.","Fortæl os om dig selv."],
+ 'pr.first':["First Name","Voornaam","Fornavn"],
+ 'pr.last':["Last Name","Achternaam","Efternavn"],
+ 'pr.country':["Country","Land","Land"],
+ 'pr.fa':["National FA","Nationale bond","Nationalt forbund"],
+ 'pr.level':["Referee level","Scheidsrechtersniveau","Dommerniveau"],
+ 'next':["Next","Volgende","Næste"],
+ 'cont':["Continue","Doorgaan","Fortsæt"],
+ 't.about':["About You","Over jou","Om dig"],
+ 'goal.h':["What do you want to improve this season?","Wat wil je dit seizoen verbeteren?","Hvad vil du forbedre denne sæson?"],
+ 'goal.sub':["Pick as many as you like.","Kies er zoveel als je wilt.","Vælg så mange du vil."],
+ 't.start':["Getting started","Aan de slag","Kom i gang"],
+ 'w.none':["No watch found","Geen horloge gevonden","Intet ur fundet"],
+ 'w.pair':["Pair your watch now","Koppel nu je horloge","Par dit ur nu"],
+ 'w.nowatch':["I don't have a watch","Ik heb geen horloge","Jeg har ikke et ur"],
+ 'ld.h':["Setting up REFSIX for you…","REFSIX wordt voor je ingesteld…","Vi sætter REFSIX op til dig…"],
+ 'ld.prof':["{lvl} referee · {fa}","Scheidsrechter {lvl} · {fa}","Dommer {lvl} · {fa}"],
+ 'ld.watch':["Getting your {w} ready for match day","Je {w} klaarzetten voor de wedstrijddag","Gør dit {w} klar til kampdag"],
+ 'ld.phone':["Setting up match day on your phone","De wedstrijddag op je telefoon klaarzetten","Gør kampdag klar på din telefon"],
+ 'ld.focus':["Focus this season: {x}","Focus dit seizoen: {x}","Fokus denne sæson: {x}"],
+ 'ld.pro':["Unlocking 14 days of REFSIX PRO","14 dagen REFSIX PRO ontgrendelen","Låser 14 dage med REFSIX PRO op"],
+ 'hm.left':["14 Days left","Nog 14 dagen","14 dage tilbage"],
+ 'po.h':["{n}, your 14 days of PRO start now","{n}, je 14 dagen PRO beginnen nu","{n}, dine 14 dage med PRO starter nu"],
+ 'po.lab':["After your first match you'll see","Na je eerste wedstrijd zie je","Efter din første kamp ser du"],
+ 'po.p1b':["1,000,000+","1.000.000+","1.000.000+"],
+ 'po.p1':["matches refereed with REFSIX","wedstrijden gefloten met REFSIX","kampe dømt med REFSIX"],
+ 'po.p2b':["4.6 ★","4,6 ★","4,6 ★"],
+ 'po.p2':["from 281 App Store ratings","uit 281 App Store-beoordelingen","fra 281 bedømmelser i App Store"],
+ 'pw.h':["Improve your {x} with REFSIX PRO","Verbeter je {x} met REFSIX PRO","Forbedr din {x} med REFSIX PRO"],
+ 'pw.subW':["On your {w}, from your very first match.","Op je {w}, vanaf je allereerste wedstrijd.","På dit {w}, fra din allerførste kamp."],
+ 'pw.subP':["On your phone, from your very first match.","Op je telefoon, vanaf je allereerste wedstrijd.","På din telefon, fra din allerførste kamp."],
+ 'pw.year':["Yearly","Jaarlijks","Årligt"],
+ 'pw.yearP':["69,99 € / year","69,99 € / jaar","69,99 € / år"],
+ 'pw.yearE':["5,83 € / month · 42% less than monthly","5,83 € / maand · 42% minder dan maandelijks","5,83 € / md. · 42% mindre end månedligt"],
+ 'pw.pop':["MOST POPULAR","MEEST GEKOZEN","MEST POPULÆR"],
+ 'pw.month':["Monthly","Maandelijks","Månedligt"],
+ 'pw.monthP':["9,99 € / month","9,99 € / maand","9,99 € / måned"],
+ 'pw.trust':["No commitment, cancel any time.","Geen verplichting, altijd opzegbaar.","Ingen binding, opsig når som helst."],
+ 'of.h':["Not ready to pay?<br><em>Keep PRO free for 14 days.</em>","Nog niet klaar om te betalen?<br><em>Houd PRO 14 dagen gratis.</em>","Ikke klar til at betale?<br><em>Behold PRO gratis i 14 dage.</em>"],
+ 'of.t1':["Today","Vandaag","I dag"],
+ 'of.d1W':["Every PRO feature unlocked on your {w}.","Alle PRO-functies ontgrendeld op je {w}.","Alle PRO-funktioner låst op på dit {w}."],
+ 'of.d1P':["Every PRO feature unlocked on your phone.","Alle PRO-functies ontgrendeld op je telefoon.","Alle PRO-funktioner låst op på din telefon."],
+ 'of.t2':["Your first match","Je eerste wedstrijd","Din første kamp"],
+ 'of.d2':["Your heatmap and distance, right after the final whistle.","Je heatmap en afstand, direct na het laatste fluitsignaal.","Dit heatmap og din distance lige efter slutfløjtet."],
+ 'of.t3':["Day 14","Dag 14","Dag 14"],
+ 'of.d3':["PRO ends. Pick yearly or monthly, or carry on with REFSIX for free.","PRO stopt. Kies jaarlijks of maandelijks, of ga gratis verder met REFSIX.","PRO slutter. Vælg årligt eller månedligt, eller fortsæt gratis med REFSIX."],
+ 'of.note':["<b>No payment today.</b> Nothing renews by itself.","<b>Vandaag geen betaling.</b> Er wordt niets automatisch verlengd.","<b>Ingen betaling i dag.</b> Intet fornyes automatisk."],
+ 'of.cta':["Start my 14 days of PRO","Start mijn 14 dagen PRO","Start mine 14 dage med PRO"],
+ 'of.plans':["See the plans again","Bekijk de abonnementen opnieuw","Se abonnementerne igen"],
+ 'hear.h':["Where did you hear about REFSIX?","Waar heb je over REFSIX gehoord?","Hvor har du hørt om REFSIX?"],
+ 'hear.ph':["Please specify how you heard about us","Vertel ons hoe je over ons hoorde","Fortæl os, hvordan du hørte om os"],
+ 'hm.t':["Matches","Wedstrijden","Kampe"],
+ 'hm.next':["Next Game","Volgende wedstrijd","Næste kamp"],
+ 'hm.d':["Days","Dagen","Dage"], 'hm.h':["Hours","Uren","Timer"], 'hm.m':["Mins","Min","Min"],
+ 'hm.none':["No upcoming matches","Geen komende wedstrijden","Ingen kommende kampe"],
+ 'hm.add':["Add Match","Wedstrijd toevoegen","Tilføj kamp"],
+ 'hm.tf':["Fixtures","Programma","Program"], 'hm.tr':["Results","Uitslagen","Resultater"],
+ 'hm.tt':["Trends","Trends","Trends"], 'hm.tm':["More","Meer","Mere"],
+ 'and':[" and "," en "," og "],
+ 'phone':["phone","telefoon","telefon"]
+};
+/* the goals map 1:1 onto REFSIX PRO features from their own paywall and App Store listing */
+var GOAL_ORDER=['pos','fit','time','admin','career'];
+var GOALS={
+ pos:{em:'🔥',h:["My positioning","Mijn positiespel","Min positionering"],s:["positioning","positiespel","positionering"],
+   g:["Your positioning on a heatmap","Je positie op een heatmap","Din positionering på et heatmap"],
+   gd:["And where on the pitch you gave each card.","En waar op het veld je elke kaart gaf.","Og hvor på banen du gav hvert kort."],f:'heat'},
+ fit:{em:'🏃',h:["My fitness and distance covered","Mijn conditie en afgelegde afstand","Min kondition og tilbagelagt distance"],s:["fitness","conditie","kondition"],
+   g:["Distance per half and every 5 minutes","Afstand per helft en per 5 minuten","Distance pr. halvleg og hvert 5. minut"],
+   gd:["Split into walking, jogging, running and sprinting.","Opgesplitst in wandelen, joggen, hardlopen en sprinten.","Delt op i gang, jog, løb og sprint."],f:'perf'},
+ time:{em:'⌚',h:["Game management and timing","Wedstrijdleiding en tijdwaarneming","Kampstyring og tidtagning"],s:["timing","tijdwaarneming","tidtagning"],
+   g:["Up to 3 timers on your {w}","Tot 3 timers op je {w}","Op til 3 timere på dit {w}"],
+   gd:["Countup, countdown, elapsed and additional time, plus team colours.","Optellen, aftellen, verstreken en extra tijd, plus teamkleuren.","Op- og nedtælling, forløbet tid og tillægstid, plus holdfarver."],f:'timer'},
+ admin:{em:'📸',h:["Less admin before and after games","Minder administratie rond wedstrijden","Mindre administration før og efter kampe"],s:["match admin","administratie","administration"],
+   g:["Team sheets scanned with AI","Opstellingen gescand met AI","Holdkort scannet med AI"],
+   gd:["Instead of typing every player in by hand.","In plaats van elke speler met de hand in te typen.","I stedet for at taste hver spiller ind i hånden."],f:'scan'},
+ career:{em:'📈',h:["Getting promoted","Promotie maken","At blive rykket op"],s:["path to promotion","weg naar promotie","vej til oprykning"],
+   g:["Season and career trends","Seizoens- en carrièretrends","Sæson- og karrieretrends"],
+   gd:["Total distance, where you give most cards, how much you sprint.","Totale afstand, waar je de meeste kaarten geeft, hoeveel je sprint.","Samlet distance, hvor du giver flest kort, hvor meget du sprinter."],f:'trend'}
+};
+/* their six paywall lines, in their order; the goal moves its line to the top */
+var FEATS={
+ timer:['⌚',["Advanced Timers","Geavanceerde timers","Avancerede timere"]],
+ heat:['🔥',["Heatmaps","Heatmaps","Heatmaps"]],
+ scan:['📸',["AI Teamsheet Scanner","AI-opstellingsscanner","AI-holdkortscanner"]],
+ perf:['🏃',["Performance Data","Prestatiedata","Præstationsdata"]],
+ trend:['📈',["Achieve your career goals supported by trends","Haal je carrièredoelen met hulp van trends","Nå dine karrieremål med hjælp fra trends"]],
+ video:['📺',["Video Analysis","Videoanalyse","Videoanalyse"]]
+};
+var FEAT_ORDER=['timer','heat','scan','perf','trend','video'];
+var WATCH={garmin:'Garmin',samsung:'Samsung watch',wearos:'Wear OS watch',apple:'Apple Watch',none:''};
+var WATCHL={samsung:["Samsung watch","Samsung-horloge","Samsung-ur"],wearos:["Wear OS watch","Wear OS-horloge","Wear OS-ur"]};
+var HEAR=[["Friend/Referee Colleague","Vriend/collega-scheidsrechter","Ven/dommerkollega"],
+ ["Social Media (TikTok, Facebook, X, Instagram)","Sociale media (TikTok, Facebook, X, Instagram)","Sociale medier (TikTok, Facebook, X, Instagram)"],
+ ["YouTube","YouTube","YouTube"],["Search","Zoeken","Søgning"],["My National FA","Mijn nationale bond","Mit nationale forbund"],
+ ["My County FA","Mijn regionale bond","Mit lokale forbund"],["Other","Anders","Andet"]];
+var COUNTRIES=[{k:'gb',n:["United Kingdom","Verenigd Koninkrijk","Storbritannien"],fa:'The FA'},
+ {k:'nl',n:["Netherlands","Nederland","Holland"],fa:'KNVB'},
+ {k:'dk',n:["Denmark","Denemarken","Danmark"],fa:'DBU'},
+ {k:'us',n:["United States","Verenigde Staten","USA"],fa:'U.S. Soccer'}];
+var FAS=['The FA','KNVB','DBU','U.S. Soccer'];
+var MARKET={en:'gb',nl:'nl',da:'dk'};
+var LEVEL={en:'Level 7',nl:'Regio 3',da:'Serie 2'};
+
+/* ================= state ================= */
+var S0={lang:'en',theme:'dark'};
+function defaults(){ var c=MARKET[S0.lang]; return { lang:S0.lang, theme:S0.theme, first:'Alex', last:'Morgan', country:c,
+  fa:COUNTRIES.filter(function(x){return x.k===c;})[0].fa, level:LEVEL[S0.lang], goals:['pos','fit'], watch:'garmin', plan:'year', hear:0 }; }
+var S=defaults();
+function L(){ return LANGS.indexOf(S.lang); }
+function t(k,v){ var s=(T[k]||[k])[L()]; if(v) Object.keys(v).forEach(function(x){ s=s.split('{'+x+'}').join(v[x]); }); return s; }
+function joinL(a){ return a.length<2 ? (a[0]||'') : a.slice(0,-1).join(', ')+t('and')+a[a.length-1]; }
+function wname(){ if(S.watch==='none') return t('phone'); return WATCHL[S.watch] ? WATCHL[S.watch][L()] : WATCH[S.watch]; }
+function chosen(){ return GOAL_ORDER.filter(function(k){ return S.goals.indexOf(k)>-1; }); }
+
+/* ================= builders (re-run on language change) ================= */
+var ck='<span class="rs-ck"><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg></span>';
+var chev='<svg class="rs-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m9 6 6 6-6 6"/></svg>';
+function buildGoals(){ var g=document.getElementById('goalList'); g.innerHTML='';
+  GOAL_ORDER.forEach(function(k){ var b=document.createElement('button'); b.className='rs-row'; b.dataset.v=k;
+    b.innerHTML='<span class="em">'+GOALS[k].em+'</span><span class="lbl">'+GOALS[k].h[L()]+'</span>'+ck;
+    b.addEventListener('click',function(){ var i=S.goals.indexOf(k); if(i>-1) S.goals.splice(i,1); else S.goals.push(k); syncScreen(); });
+    g.appendChild(b); }); }
+function buildHear(){ var g=document.getElementById('hearList'); g.innerHTML='';
+  HEAR.forEach(function(h,i){ var b=document.createElement('button'); b.className='rs-row'; b.dataset.i=i;
+    b.innerHTML='<span class="lbl">'+h[L()]+'</span>'+chev;
+    b.addEventListener('click',function(){ S.hear=i; go('home'); }); g.appendChild(b); });
+  var o=document.createElement('div'); o.className='rs-other'; o.textContent=t('hear.ph'); g.appendChild(o); }
+function buildSelects(){
+  var c=document.getElementById('fCountry'); c.innerHTML=COUNTRIES.map(function(x){ return '<option value="'+x.k+'">'+x.n[L()]+'</option>'; }).join('');
+  var f=document.getElementById('fFa'); f.innerHTML=FAS.map(function(x){ return '<option>'+x+'</option>'; }).join(''); }
+function applyStatic(){
+  document.documentElement.lang=S.lang;
+  document.querySelectorAll('[data-t]').forEach(function(el){ el.textContent=t(el.dataset.t); });
+  document.querySelectorAll('[data-th]').forEach(function(el){ el.innerHTML=t(el.dataset.th); });
+  buildGoals(); buildHear(); buildSelects();
+}
+
+/* ================= everything downstream reads S ================= */
+function syncScreen(){
+  var li=L(), w=wname(), gs=chosen();
+  /* profile */
+  var fF=document.getElementById('fFirst'), fL=document.getElementById('fLast'), fV=document.getElementById('fLevel');
+  if(document.activeElement!==fF) fF.value=S.first; if(document.activeElement!==fL) fL.value=S.last; if(document.activeElement!==fV) fV.value=S.level;
+  document.getElementById('fCountry').value=S.country; document.getElementById('fFa').value=S.fa;
+  document.getElementById('rowLevel').classList.toggle('req',!S.level.trim());
+  document.getElementById('profBtn').disabled=!S.level.trim() || !S.first.trim();
+  /* goal */
+  document.querySelectorAll('#goalList .rs-row').forEach(function(b){ b.classList.toggle('on', S.goals.indexOf(b.dataset.v)>-1); });
+  document.getElementById('goalBtn').disabled=!gs.length;
+  /* watch */
+  document.querySelectorAll('#watchList .rs-wrow').forEach(function(b){ b.classList.toggle('on', b.dataset.w===S.watch); });
+  /* loader reads back every answer */
+  var st=document.querySelectorAll('#loadSteps .rs-ls .t');
+  st[0].textContent=t('ld.prof',{lvl:S.level||'—',fa:S.fa});
+  st[1].textContent=S.watch==='none' ? t('ld.phone') : t('ld.watch',{w:w});
+  st[2].textContent=t('ld.focus',{x:joinL(gs.map(function(k){ return GOALS[k].s[li]; }))});
+  st[3].textContent=t('ld.pro');
+  /* payoff: what PRO shows them, in the order of their goals */
+  document.getElementById('poH').textContent=t('po.h',{n:S.first||'Ref'});
+  var list=gs.length?gs:['pos'];
+  document.getElementById('poGets').innerHTML=list.map(function(k){ var G=GOALS[k];
+    return '<div class="rs-get"><span class="em">'+G.em+'</span><span><b>'+G.g[li].split('{w}').join(w)+'</b>'+G.gd[li]+'</span></div>'; }).join('');
+  /* paywall: headline names the goal, their line moves to the top, their watch named */
+  var top=list.slice(0,2).map(function(k){ return GOALS[k].s[li]; });
+  document.getElementById('payH').textContent=t('pw.h',{x:joinL(top)});
+  document.getElementById('paySub').textContent= S.watch==='none' ? t('pw.subP') : t('pw.subW',{w:w});
+  var hits=list.map(function(k){ return GOALS[k].f; }), ord=hits.concat(FEAT_ORDER.filter(function(f){ return hits.indexOf(f)<0; }));
+  document.getElementById('featList').innerHTML=ord.map(function(f){ return '<div class="rs-fl'+(hits.indexOf(f)>-1?' hit':'')+'"><span class="em">'+FEATS[f][0]+'</span><span>'+FEATS[f][1][li]+'</span></div>'; }).join('');
+  document.querySelectorAll('#planList .rs-plan').forEach(function(b){ b.classList.toggle('on', b.dataset.v===S.plan); });
+  /* offer */
+  document.getElementById('ofD1').textContent= S.watch==='none' ? t('of.d1P') : t('of.d1W',{w:w});
+}
+
+/* ================= router ================= */
+var ORDER=['profile','goal','watch','loader','payoff','paywall','offer','hear','home'];
+var LABEL={profile:'Profile',goal:'Goal',watch:'Watch',loader:'Loader',payoff:'Payoff',paywall:'Paywall',offer:'Offer on close',hear:'Heard about us',home:'Matches'};
+var scr={}, hist=[], cur='profile', loadTimers=[];
+document.querySelectorAll('.scr').forEach(function(s){ scr[s.dataset.id]=s; });
+
+function chrome(){ var lt=S.theme==='light' && cur!=='paywall';
+  document.getElementById('sbar').classList.toggle('dk',lt); document.getElementById('homebar').classList.toggle('dk',S.theme==='light'); }
+function enter(id){ chrome(); paintChips(); paintPanel(); clearLoad();
+  if(id==='loader') runLoader(); }
+function go(id,opts){
+  opts=opts||{}; if(id===cur) return;
+  var from=scr[cur], to=scr[id];
+  if(!opts.back) hist.push(cur);
+  if(from){ from.classList.remove('is-active');
+    if(!to.classList.contains('sheet') && !from.classList.contains('sheet')) from.classList.add('is-past'); }
+  if(from && to.classList.contains('sheet')) from.classList.add('is-active');
+  Object.keys(scr).forEach(function(k){ if(k!==id&&k!==cur) scr[k].classList.remove('is-active'); });
+  if(from && !to.classList.contains('sheet')) from.classList.remove('is-active');
+  to.classList.remove('is-past'); to.classList.add('is-active');
+  cur=id; enter(id);
+}
+function back(){
+  if(!hist.length) return;
+  var prev=hist.pop(); if(prev==='loader') prev=hist.pop()||'watch';
+  scr[cur].classList.remove('is-active');
+  scr[prev].classList.remove('is-past'); scr[prev].classList.add('is-active');
+  cur=prev; enter(prev);
+}
+function jump(id){
+  var i=ORDER.indexOf(id);
+  Object.keys(scr).forEach(function(k){ scr[k].classList.add('nofx'); scr[k].classList.remove('is-active','is-past'); });
+  hist=ORDER.slice(0,i<0?0:i).filter(function(k){ return k!=='loader' && k!=='offer'; });
+  if(id==='offer') scr.paywall.classList.add('is-active');
+  scr[id].classList.add('is-active'); cur=id;
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){
+    Object.keys(scr).forEach(function(k){ scr[k].classList.remove('nofx'); }); }); });
+  syncScreen(); enter(id);
+}
+var chipsBuilt=false;
+function paintChips(){
+  var c=document.getElementById('chips');
+  if(!chipsBuilt){ chipsBuilt=true;
+    ORDER.forEach(function(id){
+      var b=document.createElement('button'); b.className='chip'+(id==='offer'?' offer':''); b.textContent=LABEL[id];
+      b.dataset.id=id; b.onclick=function(){ stopDemo(); jump(id); }; c.appendChild(b);
+    });
+  }
+  c.querySelectorAll('.chip').forEach(function(b){ b.classList.toggle('on', b.dataset.id===cur); });
+}
+function clearLoad(){ loadTimers.forEach(clearTimeout); loadTimers=[]; }
+function runLoader(){
+  var k=demo.on?0.5:1, steps=[].slice.call(document.querySelectorAll('#loadSteps .rs-ls'));
+  steps.forEach(function(s){ s.classList.remove('on'); });
+  steps.forEach(function(s,i){ loadTimers.push(setTimeout(function(){ s.classList.add('on'); },(600+i*750)*k)); });
+  loadTimers.push(setTimeout(function(){ if(cur==='loader') go('payoff'); },4200*k));
+}
+
+/* ================= wiring ================= */
+document.querySelectorAll('[data-go]').forEach(function(b){ b.addEventListener('click',function(){ if(!b.disabled) go(b.dataset.go); }); });
+document.querySelectorAll('[data-back]').forEach(function(b){ b.addEventListener('click',back); });
+document.querySelectorAll('[data-w]').forEach(function(b){ b.addEventListener('click',function(){ S.watch=b.dataset.w; syncScreen(); go('loader'); }); });
+document.querySelectorAll('#planList .rs-plan').forEach(function(b){ b.addEventListener('click',function(){ S.plan=b.dataset.v; syncScreen(); }); });
+document.getElementById('payClose').addEventListener('click',function(){ go('offer'); });
+document.getElementById('payCta').addEventListener('click',function(){ go('hear'); });
+document.getElementById('offClose').addEventListener('click',function(){ go('hear'); });
+document.getElementById('offerCta').addEventListener('click',function(){ go('hear'); });
+document.getElementById('offerPlans').addEventListener('click',back);
+['fFirst','fLast','fLevel'].forEach(function(id){ var key={fFirst:'first',fLast:'last',fLevel:'level'}[id];
+  document.getElementById(id).addEventListener('input',function(e){ S[key]=e.target.value; syncScreen(); }); });
+document.getElementById('fCountry').addEventListener('change',function(e){ S.country=e.target.value;
+  S.fa=COUNTRIES.filter(function(x){ return x.k===S.country; })[0].fa; syncScreen(); });
+document.getElementById('fFa').addEventListener('change',function(e){ S.fa=e.target.value; syncScreen(); });
+
+function setSeg(id,attr,val){ document.querySelectorAll('#'+id+' button').forEach(function(b){ b.classList.toggle('on', b.dataset[attr]===val); }); }
+function setLang(l){
+  var wasDefault = S.country===MARKET[S.lang] && S.level===LEVEL[S.lang];
+  S.lang=l; S0.lang=l;
+  if(wasDefault){ S.country=MARKET[l]; S.fa=COUNTRIES.filter(function(x){ return x.k===S.country; })[0].fa; S.level=LEVEL[l]; }
+  setSeg('segLang','lang',l); applyStatic(); syncScreen(); paintPanel();
+}
+function setTheme(th){ S.theme=th; S0.theme=th; document.getElementById('phoneIn').classList.toggle('light',th==='light'); setSeg('segTheme','theme',th); chrome(); }
+document.querySelectorAll('#segLang button').forEach(function(b){ b.addEventListener('click',function(){ stopDemo(); setLang(b.dataset.lang); }); });
+document.querySelectorAll('#segTheme button').forEach(function(b){ b.addEventListener('click',function(){ setTheme(b.dataset.theme); }); });
+
+/* ================= the 30-second walkthrough ================= */
+var demo={tok:0,on:false,t0:0,iv:null}, finger=document.getElementById('finger'), phoneIn=document.getElementById('phoneIn');
+function W(ms){ return new Promise(function(r){ setTimeout(r,ms); }); }
+function cap(txt){ document.getElementById('demoTxt').textContent=txt; }
+async function tap(sel,tok){
+  if(demo.tok!==tok) throw 0;
+  var el=document.querySelector(sel); if(!el) return;
+  var r=el.getBoundingClientRect(), p=phoneIn.getBoundingClientRect(), z=p.width/phoneIn.offsetWidth||1;
+  finger.style.left=((r.left-p.left+r.width/2)/z)+'px'; finger.style.top=((r.top-p.top+r.height/2)/z)+'px';
+  finger.classList.add('show'); await W(380); if(demo.tok!==tok) throw 0;
+  finger.classList.add('press'); await W(120); finger.classList.remove('press'); el.click(); await W(160);
+  if(demo.tok!==tok) throw 0;
+}
+async function pause(ms,tok){ await W(ms); if(demo.tok!==tok) throw 0; }
+function startDemo(){
+  stopDemo(); var tok=++demo.tok; demo.on=true; demo.t0=Date.now();
+  var keep={lang:S.lang,theme:S.theme}; S=defaults(); S.lang=keep.lang; S.theme=keep.theme; S.goals=['pos'];
+  applyStatic(); jump('profile');
+  document.getElementById('demoCap').classList.remove('hidden');
+  demo.iv=setInterval(function(){ document.getElementById('demoProg').style.width=Math.min(100,(Date.now()-demo.t0)/220)+'%'; },200);
+  (async function(){
+    try{
+      cap('Your profile screen, unchanged. Level and FA now get used later.'); await pause(1700,tok);
+      await tap('#profBtn',tok);
+      cap('One new question: what do they want to improve this season?'); await pause(800,tok);
+      await tap('#goalList [data-v=fit]',tok); await pause(400,tok); await tap('#goalBtn',tok);
+      cap('Your watch rows, as they are. Say, a Garmin.'); await pause(800,tok);
+      await tap('#watchList [data-w=garmin]',tok);
+      cap('Setup reads every answer back: level, FA, watch, goal.'); await pause(2300,tok);
+      cap('Before Matches: their 14 days of PRO, and what PRO will show them.'); await pause(2400,tok);
+      await tap('[data-id=payoff] .rs-btn',tok);
+      cap('Your paywall, now naming their goal and their watch, with the yearly saving shown.'); await pause(2000,tok);
+      await tap('#planList [data-v=month]',tok); await pause(700,tok); await tap('#planList [data-v=year]',tok); await pause(600,tok);
+      cap('They close it. The second chance is the 14 days of PRO you already give.'); await tap('#payClose',tok); await pause(2300,tok);
+      cap('That is the flow: PRO shown at setup, one honest second chance, then Matches.');
+      finger.classList.remove('show'); await pause(2400,tok); stopDemo();
+    }catch(e){}
+  })();
+}
+function stopDemo(){ if(!demo.on) return; demo.tok++; demo.on=false; clearInterval(demo.iv); finger.classList.remove('show','press');
+  document.getElementById('demoCap').classList.add('hidden'); }
+document.getElementById('demoBtn').addEventListener('click',startDemo);
+document.getElementById('demoStop').addEventListener('click',stopDemo);
+phoneIn.addEventListener('pointerdown',function(e){ if(e.isTrusted && demo.on) stopDemo(); });
+</script>
+<script>
+/* ---- the short panel: hypothesis + potential outcome, nothing else ---- */
+var PANEL = {
+profile:{ctx:true,t:'Let us know about you.',
+ kept:'Untouched: your grouped form, the red row on the missing field, the lime headline and Next. What changes is downstream: the level and FA entered here are now read back during setup.'},
+goal:{n:4,t:'Ask what they want to improve, then read it back',
+ hyp:'Try one question about what they want to improve this season, <b>because each answer is one of your own PRO features: positioning is Heatmaps, fitness is Performance Data, timing is Advanced Timers</b>. Change it here and setup, the PRO screen and the paywall all change.',
+ kept:'Your “About You” header, the lime progress bar and headline, your grouped rows and your Next button.',
+ out:'CR +10–15%'},
+watch:{ctx:true,t:'Pair your watch now',
+ kept:'Untouched: “No watch found”, your Garmin, Samsung, Wear OS and Apple Watch logo rows and “I don’t have a watch”. The watch they tap is now named on the next three screens.'},
+loader:{n:4,t:'Ask what they want to improve, then read it back',
+ hyp:'Try reading their answers back while REFSIX sets up, <b>because today the profile and the watch go in and nothing comes back before Matches</b>. Every line here is one of their own answers.',
+ kept:'Your “Finding your watch…” watch and lime spinner, your header and progress bar.',
+ out:'CR +10–15%'},
+payoff:{n:1,t:'Show PRO at the end of setup',
+ hyp:'Try ending setup on the 14 days of PRO they already get, then the paywall, <b>because today PRO starts as a small “14 Days left” badge and the only paywall is the seventh row of the More menu</b>. Each line comes from your App Store listing, picked by their goal.',
+ kept:'Your PRO shield and “14 Days left” chip, your card rows and lime. “Over a million matches” is from refsix.com; 4.6 from 281 ratings is your UK App Store listing.',
+ out:'CR +10–20%'},
+paywall:{n:3,t:'Put their goal in the paywall headline',
+ hyp:'Try naming their goal in your headline and moving its line to the top of your list, <b>because today every referee reads “Upgrade to REFSIX PRO to unlock our premium features”</b>. Go back to Goal and pick timing: the headline and the list change.',
+ hyp2:'Try showing the yearly plan as 5,83 € a month and 42% less than paying monthly, <b>because 69,99 € and 9,99 € sit side by side with no sum between them</b>. Both figures follow from your own two store prices.',
+ n2:5, out2:'ARPU +10–15%',
+ kept:'The REFSIX wordmark and X, your heatmap and watch image, your emoji feature lines, the lime Yearly card with the black “Most popular” pill, the outlined Monthly card, “No commitment, cancel any time.” and Continue.',
+ out:'CR +15–20%'},
+offer:{n:2,t:'Make the 14 free days the second chance',
+ hyp:'Try offering the 14 days of PRO only when someone closes the paywall, <b>because today everyone gets them before seeing a price, so the paywall has nothing to fall back on</b>. The days are your own; nothing here is a new discount.',
+ kept:'Your PRO shield, lime, card surface and button. The days and the free tier after day 14 are what REFSIX does today.',
+ out:'ARPU +10–15%'},
+hear:{n:1,t:'Show PRO at the end of setup',
+ hyp:'Try asking this after the paywall, <b>because today it sits between the profile and the watch, one more step before a referee sees what PRO is</b>. Your National FA and County FA answers stay just as useful here.',
+ kept:'Untouched: the question, all seven answers in your order and the free-text box.',
+ out:'CR +10–20%'},
+home:{ctx:true,t:'Matches',
+ kept:'Where the flow hands over to the app: your Matches screen, the PRO shield with “14 Days left”, Next Game and Add Match, exactly as today.'}
+};
+
+function outBlock(lab,val){
+  return '<div class="pn-out"><div class="lab">'+lab+'</div><div class="v">'+val+'</div></div>';
+}
+function paintPanel(){
+  var d=PANEL[cur]; if(!d) return;
+  var h='';
+  if(d.ctx){
+    h += '<div class="pn-n ctx">Context · no change proposed</div><h3 class="pn-t">'+d.t+'</h3>'
+       + '<div class="pn-kept">'+d.kept+'</div>';
+  } else {
+    h += '<div class="pn-n">Idea '+d.n+' of 5</div><h3 class="pn-t">'+d.t+'</h3>'
+       + '<p class="pn-hyp">'+d.hyp+'</p>'
+       + outBlock('Potential outcome · based on Adapty data', d.out);
+    if(d.hyp2){
+      h += '<div class="pn-sep"></div>'
+         + '<div class="pn-n">Idea '+d.n2+' of 5</div><h3 class="pn-t">Show what the yearly plan saves</h3>'
+         + '<p class="pn-hyp" style="margin-top:12px">'+d.hyp2+'</p>'
+         + outBlock('Potential outcome · based on Adapty data', d.out2);
+    }
+    h += '<div class="pn-kept"><b>Your design, unchanged.</b> '+d.kept+'</div>';
+  }
+  if(S.lang!=='en') h += '<div class="pn-kept"><b>Language.</b> Screens are shown in '+(S.lang==='nl'?'Dutch':'Danish')+', translated by us, to show one flow serving every market. Store prices stay as published in euros.</div>';
+  h += '<div class="pn-foot">Ranges are Adapty’s expected effect from tests across 30,000+ subscription apps — not measured lift for REFSIX. '
+     + 'Prices, ratings and feature lines come from your own published material.</div>';
+  document.getElementById('panel').innerHTML = h;
+}
+
+/* ---- views, jumps from the overview ---- */
+function showView(v){
+  if(v!=='proto') stopDemo();
+  document.querySelectorAll('.view').forEach(function(x){ x.classList.remove('on'); });
+  document.getElementById('view-'+v).classList.add('on');
+  document.querySelectorAll('.nav-links button[data-view]').forEach(function(b){ b.classList.toggle('on', b.dataset.view===v); });
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-view]').forEach(function(b){ b.addEventListener('click',function(){ showView(b.dataset.view); }); });
+document.querySelectorAll('.idea[data-jump]').forEach(function(b){
+  b.addEventListener('click',function(){ showView('proto'); jump(b.dataset.jump); });
+});
+document.querySelectorAll('[data-demo]').forEach(function(b){ b.addEventListener('click',function(){ showView('proto'); startDemo(); }); });
+
+applyStatic();
+scr.profile.classList.add('is-active');
+syncScreen(); chrome(); paintChips(); paintPanel();
+if(/[?&]open=proto/.test(location.search)) showView('proto');
+</script>
+</body>
+</html>
